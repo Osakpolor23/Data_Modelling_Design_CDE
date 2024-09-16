@@ -1,0 +1,78 @@
+
+TABLE Sales_Fact {
+    sales_transaction_id INT PK
+    date_id INT
+    branch_id INT
+    item_id INT
+    customer_id INT
+    payment_id INT
+    order_id INT
+    quantity_sold INT
+    total_amount DECIMAL(10, 2)
+}
+
+TABLE Customer_Dimension {
+    customer_id INT PK
+    firstname VARCHAR(255)
+    lastname VARCHAR (255)
+    gender VARCHAR (50)
+    phone VARCHAR (50)
+    email VARCHAR (50)
+    address VARCHAR(255)
+}
+
+TABLE Payment_Method_Dim {
+    payment_id INT PK
+    payment_type VARCHAR(50)
+    payment_gateway VARCHAR(100)
+}
+
+TABLE Date_Dim{
+    date_id INT PK
+    date DATE
+    day_of_week VARCHAR(10)
+    month INT
+    quarter INT
+    year INT
+}
+
+TABLE Menu_Item_Dimension {
+    item_id INT PK
+    item_name VARCHAR(100)
+    item_category VARCHAR(50)
+}
+
+TABLE Branch_Dimension {
+    branch_id INT PK
+    branch_name VARCHAR(100)
+    branch_location VARCHAR(100)
+    branch_type VARCHAR(50)
+}
+
+TABLE Stock_Inventory {
+    branch_id INT
+    item_id INT
+    stock_level INT
+}
+
+TABLE Orders_Dim {
+    order_id INT
+    order_type INT
+}
+
+
+Ref: "Date_Dim"."date_id" < "Sales_Fact"."date_id"
+
+Ref: "Branch_Dimension"."branch_id" < "Sales_Fact"."branch_id" 
+
+Ref: "Menu_Item_Dimension"."item_id" < "Sales_Fact"."item_id"
+
+Ref: "Stock_Inventory"."branch_id" < "Branch_Dimension"."branch_id"
+
+Ref: "Stock_Inventory"."item_id" < "Menu_Item_Dimension"."item_name"
+
+Ref: "Sales_Fact"."customer_id" < "Customer_Dimension"."customer_id"
+
+Ref: "Payment_Method_Dim"."payment_id" < "Sales_Fact"."payment_id"
+
+Ref: "Sales_Fact"."order_id" < "Orders_Dim"."order_id"
